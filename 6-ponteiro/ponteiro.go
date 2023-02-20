@@ -7,6 +7,6 @@ func main() {
 	var ponteiro_num1 *int = &num1 // ponteiro_num1 tem o valor da referencia na memoria de num1
 	println(num1, ponteiro_num1)
 	num1 = 30
-	println(num1, *ponteiro_num1) // * para pegar o valor do ponteiro em vez da referencia (desreferenciar) 
+	println(num1, *ponteiro_num1) // * ler o valor que esta naquele espaco de memoria (desreferenciar) 
 
 }
