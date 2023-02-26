@@ -9,7 +9,6 @@ import (
 func Connectar() (*sql.DB, error) {
 	strConnect := "user=veronez password=261602317 dbname=golang_studies sslmode=disable"
 	db, err := sql.Open("postgres", strConnect)
-
 	if err != nil {
 		return nil, err
 	}
