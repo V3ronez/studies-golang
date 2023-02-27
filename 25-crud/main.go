@@ -14,5 +14,6 @@ func main() {
 	r.HandleFunc("/usuarios", route.BuscarUsuarios).Methods(http.MethodGet)
 	r.HandleFunc("/usuario/{id}", route.BuscarUsuarioID).Methods(http.MethodGet)
 	r.HandleFunc("/usuario/{id}", route.AtualizarUsuario).Methods(http.MethodPut)
+	r.HandleFunc("/usuario/{id}", route.DeletarUsuario).Methods(http.MethodDelete)
 	log.Fatal(http.ListenAndServe(":3333", r))
 }
