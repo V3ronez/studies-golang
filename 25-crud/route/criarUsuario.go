@@ -122,3 +122,42 @@ func BuscarUsuarioID(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 }
+func AtualizarUsuario(w http.ResponseWriter, r *http.Request) {
+	parametros := mux.Vars(r)
+	ID, err := strconv.ParseUint(parametros["id"], 10, 64)
+	if err != nil {
+		w.Write([]byte("Erro ao pegar o parametro"))
+		return
+	}
+	corpoRequisicao, err := io.ReadAll(r.Body)
+	fmt.Appendln(corpoRequisicao)
+	if err != nil {
+		w.Write([]byte("Erro ao pegar o corpo da requisicao"))
+		return
+	}
+	var usuario usuarioType
+	if err = json.Unmarshal(corpoRequisicao, &usuario); err != nil {
+		w.Write([]byte("Erro ao fazer o parse do json"))
+		return
+	}
+	db, err := banco.Connectar()
+
+	if err != nil {
+		w.Write([]byte("Erro ao se connectar ao banco"))
+		return
+	}
+	defer db.Close()
+
+	var query string = "UPDATE usuarios SET nome = $1, email = $2 WHERE id = $3"
+	stmt, err := db.Prepare(query)
+	if err != nil {
+		w.Write([]byte(err.Error()))
+		return
+	}
+	defer stmt.Close()
+	if _, err := stmt.Exec(&usuario.Nome, &usuario.Email, ID); err != nil {
+		w.Write([]byte("Erro ao atualizar usuario"))
+	}
+	w.WriteHeader(http.StatusNoContent)
+
+}
