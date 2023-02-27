@@ -48,3 +48,39 @@ func CriarUsuario(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusCreated) //201
 	w.Write([]byte(fmt.Sprintf("Usuario inserido com sucesso: %d", inserir)))
 }
+
+func BuscarUsuarios(w http.ResponseWriter, r *http.Request) {
+	var query string = "SELECT * FROM usuarios"
+
+	db, err := banco.Connectar()
+
+	if err != nil {
+		w.Write([]byte("Erro ao conectar ao banco"))
+		return
+	}
+	defer db.Close()
+
+	linhas, err := db.Query(query)
+	if err != nil {
+		w.Write([]byte("Erro ao buscar ao banco"))
+		return
+	}
+	defer linhas.Close()
+
+	var usuarios []usuarioType
+	for linhas.Next() {
+		var usuario usuarioType
+		if err = linhas.Scan(&usuario.ID, &usuario.Nome, &usuario.Email); err != nil {
+			w.Write([]byte("Erro ao buscar ao banco"))
+			return
+		}
+		usuarios = append(usuarios, usuario)
+	}
+
+	w.WriteHeader(http.StatusOK)
+
+	if err := json.NewEncoder(w).Encode(usuarios); err != nil {
+		w.Write([]byte("Erro ao fazer encode do dados do banco"))
+		return
+	}
+}
