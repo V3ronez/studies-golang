@@ -1,6 +1,7 @@
 package main
 
 func main() {
+	// PONTEIROS RECEBEM ESPACOS DA MEMORIA
 	//ponteiros sao referencias de memorias e não guardam o valor em si da variavel mas sim a referencia dela na memoria
 	// * indica que é um ponteiro e & voce referencia outra variavel
 	var num1 int = 12
